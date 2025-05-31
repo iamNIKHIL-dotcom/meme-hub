@@ -1,6 +1,13 @@
+import { Template } from '@/types/templates';
 import React from 'react'
 
-const MainContainer = () => {
+
+
+type MainContainerProps = {
+  templates : Record<string, Template>;
+};
+
+const MainContainer = ({templates} : MainContainerProps) => {
   return (
     <div>MainContainer</div>
   )

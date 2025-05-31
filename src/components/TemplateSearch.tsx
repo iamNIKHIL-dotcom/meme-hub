@@ -1,14 +1,18 @@
+"use client"
 import React, { useState } from 'react'
 import { motion } from "framer-motion"
 import { ArrowDownRight } from 'lucide-react'
 import MainContainer from './MainContainer'
 import { templates } from '@/data/templates'
+import useSelected from '@/hooks/useSelected'
 
 
 const TemplateSearch = () => {
 
 
     const [ searchQuery, setSearchQuery ] = useState("")
+    const { selected } = useSelected()
+
 
     const filteredTemplates = Object.entries(templates).filter(([key]) =>
         key.toLowerCase().replace(/-/g, ' ').includes(searchQuery.toLowerCase())
@@ -17,7 +21,7 @@ const TemplateSearch = () => {
 
   return (
     <motion.div>
-        <div>
+        <div className={`justify-center pb-16 relative w-full ${selected ? 'hidden' : 'flex'}`}>
             <motion.div>
                 <motion.input
                     type='text'
@@ -36,7 +40,7 @@ const TemplateSearch = () => {
         </div>
         {
             filteredTemplates.length < 1 ? <div className='min-h-[30vh] max-sm:min-h-[50vh]'><p>No templates found</p></div>
-            : <MainContainer />
+            : <MainContainer templates={Object.fromEntries(filteredTemplates)}/>
         }
     </motion.div>
   )
