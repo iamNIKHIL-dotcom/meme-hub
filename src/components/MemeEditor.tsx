@@ -17,15 +17,25 @@ export default function MemeEditor({ template, onReset }: MemeEditorProps) {
 
     
     const handleChange = (idx : number, value: string)=>{
-
+        const arr = [...texts];
+        arr[idx] = value;
+        setTexts(arr);
     };
-    
-     const waitForFont = async(font : string) =>{
+
+    const waitForFont = async(font : string) =>{
         if (document.fonts && document.fonts.load) {
             await document.fonts.load(`bold 20px ${font}`);
             await document.fonts.ready;
         }
-     }
+    }
+
+    const downloadMeme = () =>{
+
+    }
+
+    const copyMeme = async () =>{
+        
+    }
 
 
 
@@ -87,9 +97,27 @@ export default function MemeEditor({ template, onReset }: MemeEditorProps) {
                         onChange={ (e : ChangeEvent<HTMLInputElement>) =>{
                             handleChange(i, e.target.value)
                         }}
+                        className='w-full p-2 text-sm border rounded-md bg-[#0f0f0f] border-white/20 text-white'
 
                     />  
                 ))}
+                <div>
+                    {/* change to motion button */}
+                    <button 
+                        className="px-4 py-2 w-full bg-[#6a7bd1] hover:bg-[#6975b3] font-medium  border border-white/20 text-sm text-white rounded-md transition-colors"
+                        onClick={downloadMeme}
+                    >
+                        Download
+                    </button>
+                    {/* change to motion */}
+                    <button 
+
+                        className="px-4 py-2 w-full bg-transparent text-black hover:bg-gray-100/50 dark:hover:bg-white/5 font-medium !cursor-none border border-[#6a7bd1] text-sm dark:text-white rounded-md transition-colors"
+                        onClick={copyMeme}
+                    >
+                        Copy
+                    </button>
+                </div>
                 </div>
             </div>
         </section>
