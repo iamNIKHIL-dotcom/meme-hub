@@ -22,7 +22,10 @@ const TemplateSearch = () => {
   return (
     <motion.div>
         <div className={`justify-center pb-16 relative w-full ${selected ? 'hidden' : 'flex'}`}>
-            <motion.div>
+            <motion.div
+                 className="relative w-full max-w-md"
+            
+            >
                 <motion.input
                     type='text'
                     placeholder='Search template'
@@ -31,7 +34,9 @@ const TemplateSearch = () => {
                     className='rounded-3xl '
                 />
 
-                <motion.span>
+                <motion.span
+                    className="bg-white rounded-full p-1 text-black absolute"
+                >
                     <ArrowDownRight  className='w-4 h-4'/>
                 </motion.span>
 
