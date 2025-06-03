@@ -35,7 +35,8 @@ export default function TemplateSelector({ templates, onSelect }: TemplateSelect
                             <Image
                                 src={tpl.image}
                                 alt={key}
-                                fill
+                                width={64} // Specify width
+                                height={64}
                                 className=" object-cover rounded-2xl shadow"
                                 loading='lazy'
                             />
