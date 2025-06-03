@@ -3,6 +3,7 @@ import { Template } from '@/types/templates';
 import { AnimatePresence,motion } from 'framer-motion';
 import React from 'react'
 import TemplateSelector from './TemplateSelector';
+import MemeEditor from './MemeEditor';
 
 
 type TemplateKey = string;
@@ -13,10 +14,10 @@ type MainContainerProps = {
 
 const MainContainer = ({templates} : MainContainerProps) => {
 
-  const { selected, setselected } = useSelected();
+  const { selected, setSelected } = useSelected();
   const handleSelect = (key : string ) =>{
     if(key in templates){
-      setselected(key as TemplateKey);
+      setSelected(key as TemplateKey);
     }
   };
 
@@ -27,7 +28,7 @@ const MainContainer = ({templates} : MainContainerProps) => {
             <motion.div 
               key = "selector"
               initial= {{ opacity:0 ,y:20 }}
-              animate {{opacity : 0, y : 0}}
+              animate = {{opacity : 0, y : 0}}
               exit={{ opacity : 0, y : -20}}
               transition={{
                             duration: 0.4,
@@ -38,7 +39,18 @@ const MainContainer = ({templates} : MainContainerProps) => {
                             onSelect={handleSelect}/>
             </motion.div>
           ): (
-            <></>
+            <div>
+              { selected && templates[selected] ? (
+                <MemeEditor template= {templates[selected]}
+                            onReset= {() => setSelected("")} 
+                />
+
+              ) : (
+                <div>
+                  template not found,try again
+                </div>
+              )}
+            </div>
           )
           }
       </AnimatePresence>
