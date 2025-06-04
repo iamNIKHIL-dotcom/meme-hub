@@ -2,7 +2,7 @@
 
 
 import { Template } from '@/types/templates';
-import { MoveLeft } from 'lucide-react';
+import { Calculator, MoveLeft } from 'lucide-react';
 import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
 
 type MemeEditorProps = {
@@ -13,47 +13,101 @@ type MemeEditorProps = {
 export default function MemeEditor({ template, onReset }: MemeEditorProps) {
 
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
-    const [texts,setTexts ] = useState<string[]>(Array(template.textBoxes.length).fill(""));
+    const [texts, setTexts] = useState<string[]>(Array(template.textBoxes.length).fill(""));
 
-    
-    const handleChange = (idx : number, value: string)=>{
+
+    const handleChange = (idx: number, value: string) => {
         const arr = [...texts];
         arr[idx] = value;
         setTexts(arr);
     };
 
-    const waitForFont = async(font : string) =>{
+    const waitForFont = async (font: string) => {
         if (document.fonts && document.fonts.load) {
             await document.fonts.load(`bold 20px ${font}`);
             await document.fonts.ready;
         }
     }
 
-    const downloadMeme = () =>{
+    const downloadMeme = () => {
 
     }
 
-    const copyMeme = async () =>{
-        
+    const copyMeme = async () => {
+
     }
 
+    const CalculateFontSize = (
+        ctx: CanvasRenderingContext2D,
+        text: string,
+        box: Template['textBoxes'][number],
+        maxFontSize: number
+    ): { fontSize: number, lines: string[] } => {
+        let fontSize = maxFontSize;
+        let lines: string[] = [];
 
 
-     const drawText = useCallback(() =>(
-        ctx : CanvasRenderingContext2D,
-        text :string,
-        box : Template['textBoxes'][number]
-     ) =>{
 
-     },[])
-     //sets image into canvas
-    useEffect(() =>{
-        const draw = async () =>{
+
+
+
+
+        return { fontSize, lines }
+    }
+
+    const drawText = useCallback(() => (
+        ctx: CanvasRenderingContext2D,
+        text: string,
+        box: Template['textBoxes'][number]
+    ) => {
+        if (!text) return;
+
+        const { fontSize, lines } = CalculateFontSize(ctx, text, box, box.fontSize);
+        ctx.font = `bold ${fontSize}px Impact,Arial,sans-serif`;
+
+        const isMobile = /Andriod|webOs|iphone/i.test(navigator.userAgent)
+        ctx.font = `bold ${fontSize}px Impact, Arial, sans-serif`;
+        ctx.fillStyle = 'white';
+        ctx.strokeStyle = 'black';
+        ctx.textAlign = box.align || 'center';
+        ctx.shadowColor = 'black';
+
+        // Device-specific adjustments
+        if (isMobile) {
+            ctx.font = `900 ${fontSize}px Impact`;
+            ctx.shadowBlur = 10;
+            ctx.shadowOffsetX = 5;
+            ctx.shadowOffsetY = 5;
+            ctx.lineWidth = 2;
+        } else {
+            ctx.shadowBlur = 20;
+            ctx.shadowOffsetX = 5;
+            ctx.shadowOffsetY = 5;
+            ctx.lineWidth = 5;
+        }
+
+        // Unified rendering
+        const lineHeight = fontSize * 1.2;
+        let currentY = box.y;
+
+        lines.forEach(line => {
+            const x = box.align === 'center' ? box.x + box.width / 2 : box.x;
+            ctx.strokeText(line, x, currentY); // Outline
+            ctx.fillText(line, x, currentY); // Fill
+            currentY += lineHeight;
+        });
+
+
+    }, []);
+
+    //sets image into canvas
+    useEffect(() => {
+        const draw = async () => {
             const canvas = canvasRef.current;
-            if(!canvas) return;
+            if (!canvas) return;
             const ctx = canvas.getContext('2d');
 
-            if(!ctx) return;
+            if (!ctx) return;
 
             await waitForFont("Impact");
 
@@ -61,11 +115,11 @@ export default function MemeEditor({ template, onReset }: MemeEditorProps) {
 
             img.src = template.image;
 
-            img.onload = () =>{
+            img.onload = () => {
                 canvas.width = img.width;
                 canvas.height = img.height;
 
-                ctx.clearRect(0,0,canvas.width, canvas.height);
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
 
                 ctx.drawImage(img, 0, 0);
 
@@ -86,38 +140,38 @@ export default function MemeEditor({ template, onReset }: MemeEditorProps) {
             </button>
             <div>
                 <div>
-                    <canvas ref = { canvasRef } className='w-[400px] '/>
+                    <canvas ref={canvasRef} className='w-[400px] ' />
                 </div>
                 <div>
-                {texts.map((txt,i) =>(
-                    <input 
-                        placeholder= {`Text position ${i+1}`}
-                        key = {i}
-                        value = {txt}
-                        onChange={ (e : ChangeEvent<HTMLInputElement>) =>{
-                            handleChange(i, e.target.value)
-                        }}
-                        className='w-full p-2 text-sm border rounded-md bg-[#0f0f0f] border-white/20 text-white'
+                    {texts.map((txt, i) => (
+                        <input
+                            placeholder={`Text position ${i + 1}`}
+                            key={i}
+                            value={txt}
+                            onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                                handleChange(i, e.target.value)
+                            }}
+                            className='w-full p-2 text-sm border rounded-md bg-[#0f0f0f] border-white/20 text-white'
 
-                    />  
-                ))}
-                <div>
-                    {/* change to motion button */}
-                    <button 
-                        className="px-4 py-2 w-full bg-[#6a7bd1] hover:bg-[#6975b3] font-medium  border border-white/20 text-sm text-white rounded-md transition-colors"
-                        onClick={downloadMeme}
-                    >
-                        Download
-                    </button>
-                    {/* change to motion */}
-                    <button 
+                        />
+                    ))}
+                    <div>
+                        {/* change to motion button */}
+                        <button
+                            className="px-4 py-2 w-full bg-[#6a7bd1] hover:bg-[#6975b3] font-medium  border border-white/20 text-sm text-white rounded-md transition-colors"
+                            onClick={downloadMeme}
+                        >
+                            Download
+                        </button>
+                        {/* change to motion */}
+                        <button
 
-                        className="px-4 py-2 w-full bg-transparent text-black hover:bg-gray-100/50 dark:hover:bg-white/5 font-medium !cursor-none border border-[#6a7bd1] text-sm dark:text-white rounded-md transition-colors"
-                        onClick={copyMeme}
-                    >
-                        Copy
-                    </button>
-                </div>
+                            className="px-4 py-2 w-full bg-transparent text-black hover:bg-gray-100/50 dark:hover:bg-white/5 font-medium !cursor-none border border-[#6a7bd1] text-sm dark:text-white rounded-md transition-colors"
+                            onClick={copyMeme}
+                        >
+                            Copy
+                        </button>
+                    </div>
                 </div>
             </div>
         </section>
