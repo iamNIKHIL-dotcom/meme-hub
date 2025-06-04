@@ -4,6 +4,7 @@
 import { Template } from '@/types/templates';
 import { Calculator, MoveLeft } from 'lucide-react';
 import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
+import { toast } from 'sonner';
 
 type MemeEditorProps = {
     template: Template;
@@ -31,9 +32,35 @@ export default function MemeEditor({ template, onReset }: MemeEditorProps) {
 
     const downloadMeme = () => {
 
+        const canvas = canvasRef.current;
+        if (!canvas) return;
+        const link = document.createElement('a');
+        link.download = 'meme.png';
+        link.href = canvas.toDataURL();
+        link.click();
     }
 
     const copyMeme = async () => {
+        const canvas = canvasRef.current;
+        if (!canvas) return;
+
+        try {
+            // Convert canvas to blob
+            const blob = await new Promise<Blob>((resolve) => {
+                canvas.toBlob((blob) => {
+                    if (blob) resolve(blob);
+                }, 'image/png');
+            });
+
+            const data = new ClipboardItem({
+                'image/png': blob
+            });
+
+            await navigator.clipboard.write([data]);
+            toast.success("meme copied to clipboard :)")
+        } catch (err) {
+            console.error('Failed to copy meme:', err);
+        }
 
     }
 
@@ -134,7 +161,7 @@ export default function MemeEditor({ template, onReset }: MemeEditorProps) {
         // Device-specific adjustments
         if (isMobile) {
             ctx.font = `900 ${fontSize}px Impact`;
-            ctx.shadowBlur = 10;
+            ctx.shadowBlur = 6
             ctx.shadowOffsetX = 5;
             ctx.shadowOffsetY = 5;
             ctx.lineWidth = 2;
