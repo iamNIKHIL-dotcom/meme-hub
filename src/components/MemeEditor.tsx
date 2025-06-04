@@ -37,6 +37,8 @@ export default function MemeEditor({ template, onReset }: MemeEditorProps) {
 
     }
 
+     const MIN_FONT_SIZE = template.textBoxes[0].minFont; 
+
     const CalculateFontSize = (
         ctx: CanvasRenderingContext2D,
         text: string,
@@ -46,10 +48,67 @@ export default function MemeEditor({ template, onReset }: MemeEditorProps) {
         let fontSize = maxFontSize;
         let lines: string[] = [];
 
+        while (fontSize > MIN_FONT_SIZE) {
+            ctx.font = `${fontSize}px Impact`;
+            lines = [];
+            let currentLine = '';
+            const words = text.split(' ');
 
+            for (const word of words) {
+                const testLine = currentLine + word + ' ';
+                const metrics = ctx.measureText(testLine);
 
+                if (metrics.width > box.width) {
+                    if (currentLine === '') {
+                        // wrapping the lines
+                        lines.push(word);
+                        currentLine = '';
+                    } else {
+                        lines.push(currentLine);
+                        currentLine = word + ' ';
+                    }
+                } else {
+                    currentLine = testLine;
+                }
+            }
+            if (currentLine) {
+                lines.push(currentLine);
+            }
 
+            const totalHeight = lines.length * (fontSize * 1.2);
+            if (totalHeight <= box.height) {
+                break;
+            }
+            fontSize -= 2;
+        }
 
+        if (fontSize < MIN_FONT_SIZE) {
+            fontSize = MIN_FONT_SIZE;
+            ctx.font = `${fontSize}px Impact`;
+            lines = [];
+            let currentLine = '';
+            const words = text.split(' ');
+
+            for (const word of words) {
+                const testLine = currentLine + word + ' ';
+                const metrics = ctx.measureText(testLine);
+
+                if (metrics.width > box.width) {
+                    if (currentLine === '') {
+                        lines.push(word);
+                        currentLine = '';
+                    } else {
+                        lines.push(currentLine);
+                        currentLine = word + ' ';
+                    }
+                } else {
+                    currentLine = testLine;
+                }
+            }
+            if (currentLine) {
+                lines.push(currentLine);
+            }
+        }
 
 
         return { fontSize, lines }
