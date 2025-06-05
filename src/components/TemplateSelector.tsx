@@ -31,18 +31,23 @@ export default function TemplateSelector({ templates, onSelect }: TemplateSelect
                         onClick={() => onSelect(key)}
                     >
                         {/* change div to motion.div */}
-                        <div>
+                        <motion.div 
+                            whileHover={{ scale: 1.02}}
+                            transition={{ duration : 0.2 }}
+                        className='relative aspect-square'>
                             <Image
                                 src={tpl.image}
                                 alt={key}
-                                width={64} // Specify width
-                                height={64}
-                                className=" object-cover rounded-2xl shadow"
+                                fill // Specify width
+                                
+                                className=" object-cover rounded-2xl shadow-xl/20"
                                 loading='lazy'
                             />
 
-                        </div>
-                        <p>
+                        </motion.div>
+                        <p
+                         className='text-center text-lg font-medium mt-2 capitalize'
+                         >
                             {key.replace(/-/g, " ")}
                         </p>
 

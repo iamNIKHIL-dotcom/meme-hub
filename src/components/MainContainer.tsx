@@ -22,7 +22,7 @@ const MainContainer = ({templates} : MainContainerProps) => {
   };
 
   return (
-    <div>
+    <div className='"max-w-5xl max-sm:w-full mx-auto p-4 max-sm:p-1'>
       <AnimatePresence mode='wait'>
           {!selected ? (
             <motion.div 
@@ -46,7 +46,9 @@ const MainContainer = ({templates} : MainContainerProps) => {
                 />
 
               ) : (
-                <div>
+                <div
+                 className='text-center text-lg'
+                 >
                   template not found,try again
                 </div>
               )}

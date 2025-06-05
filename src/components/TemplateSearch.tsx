@@ -47,7 +47,7 @@ const TemplateSearch = () => {
             </motion.div>
         </div>
         {
-            filteredTemplates.length < 1 ? <div className='min-h-[30vh] max-sm:min-h-[50vh]'><p>No templates found</p></div>
+            filteredTemplates.length < 1 ? <div className='min-h-[30vh] max-sm:min-h-[50vh]'><p className='text-center'>No templates found</p></div>
             : <MainContainer templates={Object.fromEntries(filteredTemplates)}/>
         }
     </motion.div>
