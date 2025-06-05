@@ -31,11 +31,14 @@ const TemplateSearch = () => {
                     placeholder='Search template'
                     value={searchQuery}
                     onChange={ (e) => setSearchQuery(e.target.value)}
-                    className='rounded-3xl '
+                    className="rounded-3xl py-2 px-4 w-full  border border-white/20 focus:outline-none focus:ring-2 focus:ring-[#6a7bd1] "
+                    whileFocus={{
+                            boxShadow: "0 0 0 2px rgba(106,123,209,0.5), 0 4px 24px 0px rgba(106,123,209,0.7), 0 0 0 0 transparent",
+                        }}
                 />
 
                 <motion.span
-                    className="bg-white rounded-full p-1 text-black absolute"
+                    className="bg-white rounded-full p-1.5 text-black absolute right-2 top-1/2 -translate-y-1/2 flex items-center justify-center shadow-md"
                 >
                     <ArrowDownRight  className='w-4 h-4'/>
                 </motion.span>

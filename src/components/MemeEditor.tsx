@@ -221,7 +221,9 @@ export default function MemeEditor({ template, onReset }: MemeEditorProps) {
 
     return (
         <section>
-            <button>
+            <button
+                onClick={onReset}
+             >
                 <MoveLeft /> &nbsp; Back
             </button>
             <div>
@@ -252,7 +254,7 @@ export default function MemeEditor({ template, onReset }: MemeEditorProps) {
                         {/* change to motion */}
                         <button
 
-                            className="px-4 py-2 w-full bg-transparent text-black hover:bg-gray-100/50 dark:hover:bg-white/5 font-medium !cursor-none border border-[#6a7bd1] text-sm dark:text-white rounded-md transition-colors"
+                            className="px-4 py-2 w-full bg-transparent text-black hover:bg-gray-100/50 dark:hover:bg-white/5 font-medium  border border-[#6a7bd1] text-sm dark:text-white rounded-md transition-colors"
                             onClick={copyMeme}
                         >
                             Copy
