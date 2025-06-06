@@ -67,8 +67,8 @@ const CustomTemplateCreator = ({ onBack }: CustomTemplateCreatorProps) => {
       id: `textbox-${Date.now()}`,
       x: (imageDimensions.width / 2 - 100) * scale,
       y: (imageDimensions.height / 2 - 40) * scale,
-      width: 200 * scale,
-      height: 80 * scale,
+      width: 800 * scale,
+      height: 200 * scale,
       text: "Your text here",
       fontSize: 32 * scale
     };
