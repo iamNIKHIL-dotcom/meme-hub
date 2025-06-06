@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Upload, X, ArrowLeft, Download, Copy, Plus } from 'lucide-react';
 import { toast } from 'sonner';
 import { ScrollArea } from "@/components/ui/scroll-area";
+import Image from 'next/image';
 
 type TextBox = {
   id: string;
@@ -16,6 +17,13 @@ type TextBox = {
 
 type CustomTemplateCreatorProps = {
   onBack: () => void;
+};
+
+type DragInfo = {
+  delta: {
+    x: number;
+    y: number;
+  };
 };
 
 const CustomTemplateCreator = ({ onBack }: CustomTemplateCreatorProps) => {
@@ -33,7 +41,7 @@ const CustomTemplateCreator = ({ onBack }: CustomTemplateCreatorProps) => {
     if (file) {
       const reader = new FileReader();
       reader.onload = (e) => {
-        const img = new Image();
+        const img = new window.Image();
         img.src = e.target?.result as string;
         img.onload = () => {
           setImageDimensions({ width: img.width, height: img.height });
@@ -76,7 +84,7 @@ const CustomTemplateCreator = ({ onBack }: CustomTemplateCreatorProps) => {
     setActiveTextBoxId(newTextBox.id);
   };
 
-  const handleDragTextBox = (id: string, info: any) => {
+  const handleDragTextBox = (id: string, info: DragInfo) => {
     setCustomTextBoxes(customTextBoxes.map(box =>
       box.id === id ? { ...box, x: box.x + info.delta.x, y: box.y + info.delta.y } : box
     ));
@@ -106,9 +114,11 @@ const CustomTemplateCreator = ({ onBack }: CustomTemplateCreatorProps) => {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
-    const img = new Image();
+    const img = new window.Image();
     img.src = userImage;
-    await new Promise((resolve) => (img.onload = resolve));
+    await new Promise<void>((resolve) => {
+      img.onload = () => resolve();
+    });
     canvas.width = img.width;
     canvas.height = img.height;
     ctx.drawImage(img, 0, 0);
@@ -124,9 +134,11 @@ const CustomTemplateCreator = ({ onBack }: CustomTemplateCreatorProps) => {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
-    const img = new Image();
+    const img = new window.Image();
     img.src = userImage;
-    await new Promise((resolve) => (img.onload = resolve));
+    await new Promise<void>((resolve) => {
+      img.onload = () => resolve();
+    });
     canvas.width = img.width;
     canvas.height = img.height;
     ctx.drawImage(img, 0, 0);
@@ -204,9 +216,11 @@ const CustomTemplateCreator = ({ onBack }: CustomTemplateCreatorProps) => {
                 maxHeight: '100%',
               }}
             >
-              <img
+              <Image
                 src={userImage}
                 alt="Custom meme"
+                width={containerDimensions.width}
+                height={containerDimensions.height}
                 style={{
                   width: containerDimensions.width,
                   height: containerDimensions.height,
@@ -231,7 +245,7 @@ const CustomTemplateCreator = ({ onBack }: CustomTemplateCreatorProps) => {
                     transformOrigin: 'top left',
                   }}
                   drag
-                  onDrag={(_, info) => handleDragTextBox(box.id, info)}
+                  onDrag={(_, info) => handleDragTextBox(box.id, info as DragInfo)}
                   dragMomentum={false}
                   onClick={() => setActiveTextBoxId(box.id)}
                 >
@@ -316,7 +330,7 @@ const CustomTemplateCreator = ({ onBack }: CustomTemplateCreatorProps) => {
                   {customTextBoxes.length === 0 && (
                     <div className="text-center py-8 text-gray-400 dark:text-gray-500">
                       <p>No text boxes yet</p>
-                      <p className="text-sm mt-2">Click "Add Text" to create your first text box</p>
+                      <p className="text-sm mt-2">Click &quot;Add Text&quot; to create your first text box</p>
                     </div>
                   )}
                 </div>
@@ -332,7 +346,7 @@ const CustomTemplateCreator = ({ onBack }: CustomTemplateCreatorProps) => {
                       <label className="block text-sm mb-1 text-gray-600 dark:text-gray-400">{prop.toUpperCase()}</label>
                       <input
                         type="number"
-                        value={(customTextBoxes.find(b => b.id === activeTextBoxId) as any)?.[prop] || 0}
+                        value={(customTextBoxes.find(b => b.id === activeTextBoxId) as TextBox)?.[prop as keyof TextBox] || 0}
                         onChange={(e) =>
                           setCustomTextBoxes(customTextBoxes.map(b =>
                             b.id === activeTextBoxId ? { ...b, [prop]: parseInt(e.target.value) } : b

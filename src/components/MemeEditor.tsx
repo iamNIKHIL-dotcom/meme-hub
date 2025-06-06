@@ -184,7 +184,7 @@ export default function MemeEditor({ template, onReset }: MemeEditorProps) {
         });
 
 
-    }, []);
+    }, [CalculateFontSize]);
 
     //sets image into canvas
     useEffect(() => {
