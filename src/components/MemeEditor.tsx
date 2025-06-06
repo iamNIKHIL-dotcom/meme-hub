@@ -2,7 +2,7 @@
 
 
 import { Template } from '@/types/templates';
-import { Calculator, MoveLeft } from 'lucide-react';
+import {  MoveLeft } from 'lucide-react';
 import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
 
