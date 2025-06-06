@@ -220,17 +220,20 @@ export default function MemeEditor({ template, onReset }: MemeEditorProps) {
     }, [texts, template, drawText]);
 
     return (
-        <section>
+        <section
+         className='space-y-4 min-h-[65vh] max-sm:min-h-[75vh]'
+         >
             <button
+                className="bg-transparent flex items-center"
                 onClick={onReset}
              >
                 <MoveLeft /> &nbsp; Back
             </button>
-            <div>
-                <div>
-                    <canvas ref={canvasRef} className='w-[400px] ' />
+            <div className="flex max-sm:flex-col max-sm:space-y-10 items-start space-x-16">
+                <div className='max-sm:mx-auto'>
+                    <canvas ref={canvasRef} className='border border-gray-300 dark:border-gray-700 w-[400px] h-fit' />
                 </div>
-                <div>
+                <div className="space-y-2 w-full">
                     {texts.map((txt, i) => (
                         <input
                             placeholder={`Text position ${i + 1}`}
@@ -243,7 +246,7 @@ export default function MemeEditor({ template, onReset }: MemeEditorProps) {
 
                         />
                     ))}
-                    <div>
+                    <div className='flex w-full space-x-2 mt-2'>
                         {/* change to motion button */}
                         <button
                             className="px-4 py-2 w-full bg-[#6a7bd1] hover:bg-[#6975b3] font-medium  border border-white/20 text-sm text-white rounded-md transition-colors"

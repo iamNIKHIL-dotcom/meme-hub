@@ -22,7 +22,7 @@ const MainContainer = ({templates} : MainContainerProps) => {
   };
 
   return (
-    <div className='"max-w-5xl max-sm:w-full mx-auto p-4 max-sm:p-1'>
+    <div className='max-w-5xl max-sm:w-full mx-auto p-4 max-sm:p-1 '>
       <AnimatePresence mode='wait'>
           {!selected ? (
             <motion.div 
